@@ -17,7 +17,7 @@
     <link rel="preconnect" href="https://resource.trickle.so">
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="preconnect" href="/images/Images.jpg">
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
 
     <script src="https://resource.trickle.so/vendor_lib/unpkg/react@18/umd/react.production.min.js"></script>
@@ -30,17 +30,15 @@
     <style type="text/tailwindcss">
     @layer theme {
         :root {
-            /* Warna sesuai rancangan Tugas 3B */
-            --primary-color: #8B4513; /* Cokelat Tua */
-            --secondary-color: #F5F5DC; /* Krem */
-            --accent-color: #228B22; /* Hijau */
-            --bg-primary: #F5F5DC; /* Krem untuk latar belakang utama */
-            --text-main: #4A4036; /* Cokelat gelap untuk teks */
+            --primary-color: #8B4513;
+            --secondary-color: #F5F5DC;
+            --accent-color: #228B22;
+            --bg-primary: #F5F5DC;
+            --text-main: #4A4036;
         }
     }
 
     @layer base {
-        /* Update font import ke Playfair Display dan Poppins */
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;700&display=swap');
         
         body {
@@ -70,6 +68,38 @@
                 height: 350px;
             }
         }
+
+        /* Custom Scrollbar Styles */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--secondary-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6c350f;
+        }
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--secondary-color);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     }
     </style>
 </head>
@@ -79,9 +109,6 @@
     <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // --- Component Definitions ---
-
-    // 1. Navigation.js
     const Navigation = ({ activeSection, onNavigate }) => {
       const navItems = [
         { id: 'hero', name: 'Beranda' },
@@ -103,7 +130,10 @@
                   <a
                     key={item.id}
                     href={`#${item.id}`}
-                    onClick={() => onNavigate(item.id)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onNavigate(item.id);
+                    }}
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                       activeSection === item.id 
                         ? 'text-white bg-[var(--primary-color)]' 
@@ -125,11 +155,10 @@
       );
     };
 
-    // 2. Hero.js
     const Hero = () => {
       return (
         <section id="hero" className="relative h-[60vh] md:h-[80vh] bg-cover bg-center" 
-            style={{ backgroundImage: "url('https://images.unsplash.com/photo-1598501235123-28c947ff1707?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }}>
+            style={{ backgroundImage: "url('/images/Nature.jpg')" }}>
           
           <div className="absolute inset-0 bg-black opacity-50"></div>
           
@@ -138,9 +167,9 @@
               Roti Gan Blitar
             </h2>
             <p className="text-xl md:text-2xl mb-8 max-w-xl font-light">
-              Kualitas dan Tradisi Sejak 2025. [cite: 8]
+              Kualitas dan Tradisi Sejak 2025
             </p>
-            <a href="#products" className="inline-block bg-[var(--accent-color)] text-white font-semibold py-3 px-8 rounded-lg shadow-xl hover:bg-[#1a661a] transition-colors duration-300">
+            <a href="#products" className="inline-block bg-[var(--accent-color)] !text-white font-semibold py-3 px-8 rounded-lg shadow-xl hover:bg-[#1a661a] transition-colors duration-300">
               Lihat Produk Kami
             </a>
           </div>
@@ -148,7 +177,6 @@
       );
     };
 
-    // 3. ProductList.js (Halaman tambahan Produk)
     const ProductCard = ({ product }) => (
         <div className="bg-white p-5 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
             <img 
@@ -162,7 +190,8 @@
             <a 
                 href={`https://wa.me/6281234567890?text=${encodeURIComponent('Saya tertarik dengan produk ' + product.name)}`}
                 target="_blank"
-                className="mt-4 inline-block w-full text-center bg-[var(--primary-color)] text-white py-2 rounded-lg hover:bg-[#6c350f] transition-colors"
+                rel="noopener noreferrer"
+                className="mt-4 inline-block w-full text-center bg-[var(--primary-color)] !text-white py-2 rounded-lg hover:bg-[#6c350f] transition-colors"
             >
                 Pesan via WhatsApp
             </a>
@@ -170,11 +199,10 @@
     );
 
     const ProductList = () => {
-        // Data produk simulasi
         const products = [
-            { id: 1, name: 'Roti Abon Klasik', price: 15000, description: 'Resep warisan Blitar dengan abon sapi gurih melimpah.', image: 'https://images.unsplash.com/photo-1542826438-bd32f4a431a4?q=80&w=2070&auto=format&fit=crop' },
-            { id: 2, name: 'Roti Sisir Mentega', price: 12000, description: 'Tekstur lembut dengan olesan mentega berkualitas premium yang meleleh di mulut.', image: 'https://images.unsplash.com/photo-1628198759530-08f9a2e1d704?q=80&w=2070&auto=format&fit=crop' },
-            { id: 3, name: 'Roti Gandum Sehat', price: 18000, description: 'Roti gandum utuh, pilihan terbaik untuk gaya hidup sehat Anda.', image: 'https://images.unsplash.com/photo-1596701768461-9f2061e868a2?q=80&w=2070&auto=format&fit=crop' },
+            { id: 1, name: 'Roti Abon Klasik', price: 15000, description: 'Resep warisan Blitar dengan abon sapi gurih melimpah.', image: '/images/photo1764578001.jpg' },
+            { id: 2, name: 'Roti Sisir Mentega', price: 12000, description: 'Tekstur lembut dengan olesan mentega berkualitas premium yang meleleh di mulut.', image: '/images/Bread.jpg' },
+            { id: 3, name: 'Roti Gandum Sehat', price: 18000, description: 'Roti gandum utuh, pilihan terbaik untuk gaya hidup sehat Anda.', image: '/images/Bread.jpg' },
         ];
 
         return (
@@ -192,11 +220,10 @@
         );
     };
 
-    // 4. News.js (Halaman Berita Terbaru)
     const NewsItem = ({ post }) => (
       <article className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
         <img 
-          src={post.image || 'https://images.unsplash.com/photo-1550995326-f7af0203f19e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'} 
+          src={post.image || '/images/Nature.jpg'} 
           alt={post.title} 
           className="w-full h-48 object-cover"
         />
@@ -227,7 +254,6 @@
       );
     };
 
-    // 5. PostEditor.js (Fitur Post Berita)
     const PostEditor = ({ onPublish }) => {
       const [title, setTitle] = useState('');
       const [content, setContent] = useState('');
@@ -242,8 +268,8 @@
             title: title,
             content: content,
             date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
-            author: 'Kontributor', // Siapa pun bisa memposting sesuai permintaan
-            image: 'https://images.unsplash.com/photo-1542826438-bd32f4a431a4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' 
+            author: 'Kontributor',
+            image: '/images/News.jpg' 
           });
           
           setTitle('');
@@ -262,7 +288,7 @@
             
             <button 
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center bg-[var(--accent-color)] text-white py-2 px-4 rounded-lg hover:bg-[#1a661a] transition-colors mb-4"
+                className="flex items-center bg-[var(--accent-color)] !text-white py-2 px-4 rounded-lg hover:bg-[#1a661a] transition-colors mb-4"
             >
                 <i className="lucide lucide-plus-circle w-5 h-5 mr-2"></i>
                 {isOpen ? 'Tutup Editor' : 'Tulis Berita/Konten Baru'}
@@ -297,7 +323,7 @@
                     
                     <button
                         type="submit"
-                        className="bg-[var(--primary-color)] text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#6c350f] transition-colors"
+                        className="bg-[var(--primary-color)] !text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#6c350f] transition-colors"
                     >
                         <i className="lucide lucide-send w-4 h-4 mr-2 inline-block"></i>
                         Publikasikan Konten
@@ -309,7 +335,6 @@
       );
     };
 
-    // 6. Reviews.js (Fitur Testimoni/Komentar)
     const ReviewCard = ({ review }) => (
         <div className="bg-white p-5 rounded-lg shadow-md">
             <div className="flex items-center mb-3">
@@ -376,7 +401,7 @@
                 
                 <button
                     type="submit"
-                    className="w-full bg-[var(--accent-color)] text-white font-semibold py-3 rounded-lg shadow-md hover:bg-[#1a661a] transition-colors"
+                    className="w-full bg-[var(--accent-color)] !text-white font-semibold py-3 rounded-lg shadow-md hover:bg-[#1a661a] transition-colors"
                 >
                     <i className="lucide lucide-message-square-plus w-4 h-4 mr-2 inline-block"></i>
                     Kirim Ulasan
@@ -404,7 +429,6 @@
         );
     };
 
-    // 7. Profile.js (Mengandung Visi dan Misi)
     const Profile = () => {
         return (
             <section id="profile" className="py-16 bg-[var(--secondary-color)]">
@@ -416,27 +440,27 @@
                             <div className="md:w-2/3">
                                 <h3 className="text-2xl font-bold mb-4" style={{ color: 'var(--text-main)' }}>Visi Perusahaan</h3>
                                 <p className="mb-6 border-l-4 border-[var(--accent-color)] pl-3 italic">
-                                    Menjadi perusahaan roti yang dipercaya masyarakat dalam memberikan kebahagiaan lewat produk berkualitas dan pelayanan ramah. [cite: 28, 3]
+                                    Menjadi perusahaan roti yang dipercaya masyarakat dalam memberikan kebahagiaan lewat produk berkualitas dan pelayanan ramah.
                                 </p>
 
                                 <h3 className="text-2xl font-bold mb-4" style={{ color: 'var(--text-main)' }}>Misi Perusahaan</h3>
                                 <ul className="list-disc pl-5 space-y-2">
-                                    <li>Menyediakan roti segar dan sehat menggunakan bahan pilihan. [cite: 29]</li>
-                                    <li>Mempererat relasi dengan komunitas lokal. [cite: 29]</li>
-                                    <li>Mendukung pemberdayaan sumber daya manusia setempat. [cite: 29]</li>
+                                    <li>Menyediakan roti segar dan sehat menggunakan bahan pilihan.</li>
+                                    <li>Mempererat relasi dengan komunitas lokal.</li>
+                                    <li>Mendukung pemberdayaan sumber daya manusia setempat.</li>
                                 </ul>
 
                                 <h3 className="text-2xl font-bold mt-8 mb-4" style={{ color: 'var(--text-main)' }}>Tentang Kami</h3>
                                 <p className="mb-4">
-                                    Benu Baking Factory adalah perusahaan manufaktur roti yang berlokasi di Blitar, Jawa Timur, dan dikenal dengan *brand* Roti Gan. [cite: 37] Sejak berdiri, kami berkomitmen menghasilkan roti yang tidak hanya lezat tapi juga sehat dan aman untuk dikonsumsi. [cite: 38]
+                                    Benu Baking Factory adalah perusahaan manufaktur roti yang berlokasi di Blitar, Jawa Timur, dan dikenal dengan brand Roti Gan. Sejak berdiri, kami berkomitmen menghasilkan roti yang tidak hanya lezat tapi juga sehat dan aman untuk dikonsumsi.
                                 </p>
                                 <p className="font-semibold" style={{ color: 'var(--primary-color)' }}>
-                                    Menggabungkan resep tradisional dengan teknologi produksi modern. [cite: 39]
+                                    Menggabungkan resep tradisional dengan teknologi produksi modern.
                                 </p>
                             </div>
                              <div className="md:w-1/3 mt-6 md:mt-0">
                                 <img 
-                                    src="https://images.unsplash.com/photo-1629854447814-25b8098c1151?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                                    src="/images/RotiGanFactory.jpg" 
                                     alt="Roti Gan Factory" 
                                     className="rounded-lg shadow-md w-full h-auto object-cover"
                                 />
@@ -448,9 +472,7 @@
         );
     };
 
-    // 8. WhatsAppButton.js (Tombol Cepat WA)
     const WhatsAppButton = () => {
-      // Nomor telepon tujuan (Ganti dengan nomor 0812-3456-7890 dari brosur) [cite: 10]
       const phoneNumber = "6281234567890"; 
       
       const defaultMessage = "Halo Roti Gan, saya tertarik dengan produk roti tradisional Blitar Anda. Bisakah saya memesan?";
@@ -462,7 +484,7 @@
           href={waURL} 
           target="_blank" 
           rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 z-50 bg-[var(--accent-color)] text-white p-4 rounded-full shadow-lg hover:bg-[#1a661a] transition-colors duration-300 transform hover:scale-105 group"
+          className="fixed bottom-6 right-6 z-50 bg-[var(--accent-color)] !text-white p-4 rounded-full shadow-lg hover:bg-[#1a661a] transition-colors duration-300 transform hover:scale-105 group"
           aria-label="Hubungi kami melalui WhatsApp"
         >
           <div className="flex items-center space-x-2">
@@ -477,7 +499,6 @@
       );
     };
 
-    // 9. Footer.js
     const Footer = () => {
         const currentYear = new Date().getFullYear();
         
@@ -494,9 +515,9 @@
                         <div>
                             <h4 className="font-semibold mb-4 border-b-2 border-[var(--primary-color)] pb-1">Lokasi & Kontak</h4>
                             <ul className="space-y-2 text-sm text-gray-300">
-                                <li className="flex items-center"><i className="lucide lucide-map-pin w-4 h-4 mr-2"></i> Jl. Merdeka No. 10, Blitar, Jawa Timur [cite: 12]</li>
+                                <li className="flex items-center"><i className="lucide lucide-map-pin w-4 h-4 mr-2"></i> Jl. Merdeka No. 10, Blitar, Jawa Timur</li>
                                 <li className="flex items-center"><i className="lucide lucide-mail w-4 h-4 mr-2"></i> info@rotiganblitar.com</li>
-                                <li className="flex items-center"><i className="lucide lucide-phone w-4 h-4 mr-2"></i> WA: 0812-3456-7890 [cite: 10]</li>
+                                <li className="flex items-center"><i className="lucide lucide-phone w-4 h-4 mr-2"></i> WA: 0812-3456-7890</li>
                             </ul>
                         </div>
                         <div>
@@ -511,7 +532,7 @@
                         <div>
                              <h4 className="font-semibold mb-4 border-b-2 border-[var(--primary-color)] pb-1">Sosial Media</h4>
                              <div className="flex space-x-4">
-                                <a href="https://instagram.com/RotiGan_Blitar" target="_blank" className="hover:text-[var(--primary-color)] transition-colors" aria-label="Instagram Roti Gan Blitar"><i className="lucide lucide-instagram w-6 h-6"></i></a> [cite: 10]
+                                <a href="https://instagram.com/RotiGan_Blitar" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--primary-color)] transition-colors" aria-label="Instagram Roti Gan Blitar"><i className="lucide lucide-instagram w-6 h-6"></i></a>
                                 <a href="#" className="hover:text-[var(--primary-color)] transition-colors" aria-label="Facebook"><i className="lucide lucide-facebook w-6 h-6"></i></a>
                              </div>
                         </div>
@@ -525,13 +546,12 @@
         );
     };
 
-    // 10. Dashboard.js (Dihapus karena tidak diminta, tapi saya kembalikan untuk kelengkapan)
     const Dashboard = () => {
       useEffect(() => {
         const ctx = document.getElementById('salesChart');
         if (!ctx) return;
 
-        new Chart(ctx, {
+        const chart = new Chart(ctx, {
           type: 'bar',
           data: {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
@@ -559,6 +579,8 @@
             }
           }
         });
+
+        return () => chart.destroy();
       }, []);
 
       return (
@@ -595,18 +617,16 @@
       );
     };
 
-    // --- Main Application (app.js) ---
-
     const initialPosts = [
         { 
             id: 1, 
             title: 'Benu Baking Factory Hadirkan Roti Berkualitas dengan Sentuhan Tradisi Blitar', 
-            content: 'Benu Baking Factory, yang dikenal dengan merek dagang "Roti Gan," hari ini mengumumkan pelaksanaan program promosi produk roti berkualitas tinggi yang mengusung cita rasa tradisional khas Blitar. Program ini bertujuan menjangkau masyarakat luas di kota Blitar dan sekitarnya melalui berbagai metode pemasaran modern dan interaktif, sekaligus memperkuat loyalitas pelanggan. [cite: 26, 27] "Roti Gan lebih dari sekadar roti, ini adalah momen kebersamaan yang kami bawa ke meja Anda," ujar Kepala Humas Benu Baking Factory. [cite: 33]', 
+            content: 'Benu Baking Factory, yang dikenal dengan merek dagang "Roti Gan," hari ini mengumumkan pelaksanaan program promosi produk roti berkualitas tinggi yang mengusung cita rasa tradisional khas Blitar. Program ini bertujuan menjangkau masyarakat luas di kota Blitar dan sekitarnya melalui berbagai metode pemasaran modern dan interaktif, sekaligus memperkuat loyalitas pelanggan. "Roti Gan lebih dari sekadar roti, ini adalah momen kebersamaan yang kami bawa ke meja Anda," ujar Kepala Humas Benu Baking Factory.', 
             date: '22 Oktober 2025', 
             author: 'Redaksi Roti Gan', 
-            image: 'https://images.unsplash.com/photo-1596701768461-9f2061e868a2?q=80&w=2070&auto=format&fit=crop' 
+            image: '/images/Bread.jpg' 
         },
-        { id: 2, title: 'Workshop Baking Gratis di Factory Kami!', content: 'Kami mengundang Anda untuk mengikuti workshop baking bersama kepala chef kami di Blitar. Daftarkan diri Anda segera, tempat terbatas!', date: '15 September 2025', author: 'Redaksi Roti Gan', image: 'https://images.unsplash.com/photo-1579737153922-4467776b772c?q=80&w=2070&auto=format&fit=crop' }
+        { id: 2, title: 'Workshop Baking Gratis di Factory Kami!', content: 'Kami mengundang Anda untuk mengikuti workshop baking bersama kepala chef kami di Blitar. Daftarkan diri Anda segera, tempat terbatas!', date: '15 September 2025', author: 'Redaksi Roti Gan', image: '/images/BakingWorkshop.jpg' }
     ];
 
     const initialReviews = [
@@ -614,42 +634,38 @@
         { id: 2, name: 'Bambang Sudiro', comment: 'Pelayanan cepat dan ramah. Roti Sisirnya mengingatkan saya pada masa kecil di Blitar. Pertahankan kualitasnya!', date: '18 November 2025' },
     ];
 
-
     const App = () => {
         const [posts, setPosts] = useState(initialPosts);
         const [reviews, setReviews] = useState(initialReviews);
         const [activeSection, setActiveSection] = useState('hero'); 
 
-        // Fungsi Post Berita
         const handleNewPost = (newPost) => {
             setPosts(prev => [newPost, ...prev]);
-            // Scroll ke section News setelah publish
-            document.getElementById('news').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                document.getElementById('news').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
         };
 
-        // Fungsi Tambah Testimoni/Komentar
         const handleNewReview = (newReview) => {
             setReviews(prev => [newReview, ...prev]);
         };
         
-        // Fungsi untuk navigasi (Scroll ke bagian yang diminta)
         const handleNavigate = (sectionId) => {
             setActiveSection(sectionId);
             document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
         };
-
 
         return (
             <div className="min-h-screen">
                 <Navigation activeSection={activeSection} onNavigate={handleNavigate} />
                 <main>
                     <Hero />
-                    <ProductList /> {/* Halaman Produk */}
-                    <News posts={posts} /> {/* Halaman Berita Terbaru */}
-                    <PostEditor onPublish={handleNewPost} /> {/* Editor Berita/Konten */}
-                    <Reviews reviews={reviews} onPublishReview={handleNewReview} /> {/* Ulasan/Testimoni */}
+                    <ProductList />
+                    <News posts={posts} />
+                    <PostEditor onPublish={handleNewPost} />
+                    <Reviews reviews={reviews} onPublishReview={handleNewReview} />
                     <Dashboard />
-                    <Profile /> {/* Profil Perusahaan (Visi, Misi) */}
+                    <Profile />
                 </main>
                 <WhatsAppButton />
                 <Footer />
@@ -657,7 +673,6 @@
         );
     };
 
-    // Merender komponen utama ke dalam div dengan id="root"
     ReactDOM.render(<App />, document.getElementById('root'));
     </script>
 </body>
