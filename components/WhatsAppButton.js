@@ -1,6 +1,6 @@
 function WhatsAppButton() {
   try {
-    const whatsappNumber = '6287816626999';
+    const whatsappNumber = '6282334995896';
     const message = 'Halo Roti Gan! Saya ingin bertanya tentang produk Anda.';
     
     const handleWhatsAppClick = () => {
