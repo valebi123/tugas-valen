@@ -1,5 +1,5 @@
 function WhatsAppButton() {
-  const phoneNumber = '082334995896';
+  const phoneNumber = '+6282334995896';
   const message = 'Halo Roti Gan, saya ingin bertanya tentang produk Anda';
 
   const handleClick = () => {
