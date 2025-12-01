@@ -1,42 +1,43 @@
-function Navigation() {
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+const Navigation = ({ activeSection, onNavigate }) => {
+  const navItems = [
+    { id: 'hero', name: 'Beranda' },
+    { id: 'news', name: 'Berita' },
+    { id: 'dashboard', name: 'Statistik' },
+    { id: 'reviews', name: 'Ulasan' },
+    { id: 'profile', name: 'Profil' }
+  ];
 
-  try {
-    return (
-      <nav className="sticky top-0 z-50 bg-[var(--bg-primary)] shadow-md border-b border-[var(--secondary-color)]" data-name="navigation" data-file="components/Navigation.js">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[var(--primary-color)] rounded-full flex items-center justify-center text-white font-bold text-xl">R</div>
-            <span className="font-serif text-2xl font-bold text-[var(--text-main)]">Roti Gan</span>
+  return (
+    <nav className="bg-white shadow-md sticky top-0 z-40">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <div className="flex-shrink-0 flex items-center">
+            <h1 className="text-2xl font-bold tracking-tight" style={{ fontFamily: 'Playfair Display, serif', color: 'var(--text-main)' }}>Roti Gan</h1>
           </div>
-          
-          <div className="hidden md:flex space-x-8">
-            <a href="#dashboard" className="text-[var(--text-main)] hover:text-[var(--accent-color)] font-medium transition">Dashboard</a>
-            <a href="#profile" className="text-[var(--text-main)] hover:text-[var(--accent-color)] font-medium transition">Profil</a>
-            <a href="#news" className="text-[var(--text-main)] hover:text-[var(--accent-color)] font-medium transition">Berita</a>
-            <a href="#innovation" className="text-[var(--text-main)] hover:text-[var(--accent-color)] font-medium transition">AI Lab</a>
+          <div className="hidden md:flex space-x-4">
+            {navItems.map(item => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                onClick={() => onNavigate(item.id)}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  activeSection === item.id 
+                    ? 'text-white bg-[var(--primary-color)]' 
+                    : 'text-[var(--text-main)] hover:bg-[var(--secondary-color)]'
+                }`}
+              >
+                {item.name}
+              </a>
+            ))}
           </div>
-
-          <button 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-[var(--text-main)] text-2xl"
-          >
-            <div className={`icon-${mobileMenuOpen ? 'x' : 'menu'} text-xl`}></div>
-          </button>
+          <div className="md:hidden">
+             {/* Mobile Menu Icon Placeholder */}
+            <button className="text-[var(--text-main)] hover:text-[var(--primary-color)] p-2 rounded-md">
+                <i className="lucide lucide-menu w-6 h-6"></i>
+            </button>
+          </div>
         </div>
-        
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-[var(--bg-primary)] border-t border-[var(--secondary-color)] p-4 flex flex-col space-y-3">
-            <a href="#dashboard" className="block text-[var(--text-main)]" onClick={() => setMobileMenuOpen(false)}>Dashboard</a>
-            <a href="#profile" className="block text-[var(--text-main)]" onClick={() => setMobileMenuOpen(false)}>Profil</a>
-            <a href="#news" className="block text-[var(--text-main)]" onClick={() => setMobileMenuOpen(false)}>Berita</a>
-            <a href="#innovation" className="block text-[var(--text-main)]" onClick={() => setMobileMenuOpen(false)}>AI Lab</a>
-          </div>
-        )}
-      </nav>
-    );
-  } catch (error) {
-    console.error('Navigation component error:', error);
-    return null;
-  }
-}
+      </div>
+    </nav>
+  );
+};
