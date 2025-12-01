@@ -16,7 +16,9 @@ function NewsRoom() {
             <div className="p-6">
               <h3 className="text-xl font-bold mb-3 text-[#D2691E]">Benu Baking Factory Hadirkan Roti Berkualitas dengan Sentuhan Tradisi Blitar</h3>
               <p className="text-gray-700 text-sm leading-relaxed line-clamp-3">
-                Blitar – Benu Baking Factory hari ini mengumumkan peluncuran program promosi besar-besaran untuk memperkuat brand "Roti Gan". Program ini menggabungkan pemasaran digital modern dengan interaksi langsung di pasar tradisional.
+                 22 Oktober 2025 — Benu Baking Factory, yang dikenal dengan merek dagang “Roti Gan,” hari ini mengumumkan pelaksanaan program promosi produk roti berkualitas tinggi yang mengusung cita rasa tradisional khas Blitar. Program ini bertujuan menjangkau masyarakat luas di kota Blitar dan sekitarnya melalui
+ berbagai metode pemasaran modern dan interaktif, sekaligus memperkuat loyalitas pelanggan. Benu Baking Factory berdiri dengan visi menjadi perusahaan roti yang dipercaya masyarakat dalam memberikan kebahagiaan lewat produk berkualitas dan pelayanan ramah. Misi perusahaan fokus menyediakan roti segar dan sehat
+ menggunakan bahan pilihan, mempererat relasi dengan komunitas lokal, dan mendukung pemberdayaan sumber daya manusia setempat. wakil humas valen
               </p>
               <button className="mt-4 w-full bg-[#C19A6B] text-white py-2 rounded-lg font-bold hover:bg-[#A07855] transition text-sm">
                 Baca Selengkapnya
