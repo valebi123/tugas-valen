@@ -86,7 +86,7 @@ function Profile({ currentTab, setCurrentTab }) {
                 <div className="mt-1 text-[#D2691E]"><i className="fas fa-phone fa-lg"></i></div>
                 <div>
                   <div className="font-bold">Telepon</div>
-                  <p className="text-gray-700">087816626999</p>
+                  <p className="text-gray-700">082334995896</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
