@@ -1,0 +1,71 @@
+[
+  {
+    "name": "post",
+    "fields": [
+      {
+        "name": "Title",
+        "type": "text",
+        "description": "Judul postingan",
+        "options": null
+      },
+      {
+        "name": "Content",
+        "type": "rich_text",
+        "description": "Konten postingan",
+        "options": null
+      },
+      {
+        "name": "ImageUrl",
+        "type": "text",
+        "description": "URL gambar postingan",
+        "options": null
+      },
+      {
+        "name": "Category",
+        "type": "text",
+        "description": "Kategori postingan",
+        "options": [
+          "PRESS RELEASE",
+          "DISTRIBUSI",
+          "PROMO",
+          "UMUM"
+        ]
+      },
+      {
+        "name": "PublishedDate",
+        "type": "datetime",
+        "description": "Tanggal publikasi",
+        "options": null
+      }
+    ]
+  },
+  {
+    "name": "review",
+    "fields": [
+      {
+        "name": "Name",
+        "type": "text",
+        "description": "Nama pemberi ulasan",
+        "options": null
+      },
+      {
+        "name": "Rating",
+        "type": "number",
+        "description": "Rating 1-5",
+        "options": null
+      },
+      {
+        "name": "Comment",
+        "type": "text",
+        "description": "Komentar ulasan",
+        "options": null
+      },
+      {
+        "name": "CreatedDate",
+        "type": "datetime",
+        "description": "Tanggal ulasan dibuat",
+        "options": null
+      }
+    ]
+  }
+]
