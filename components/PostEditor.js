@@ -1,115 +1,80 @@
-function PostEditor({ onClose }) {
-  const [formData, setFormData] = React.useState({
-    title: '',
-    content: '',
-    imageUrl: '',
-    category: 'UMUM'
-  });
-  const [submitting, setSubmitting] = React.useState(false);
+const PostEditor = ({ onPublish }) => {
+  const [title, setTitle] = React.useState('');
+  const [content, setContent] = React.useState('');
+  const [isOpen, setIsOpen] = React.useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setSubmitting(true);
-    try {
-      await trickleCreateObject('post', {
-        Title: formData.title,
-        Content: formData.content,
-        ImageUrl: formData.imageUrl,
-        Category: formData.category,
-        PublishedDate: new Date().toISOString()
+    
+    if (title.trim() && content.trim()) {
+      onPublish({
+        id: Date.now(),
+        title: title,
+        content: content,
+        date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
+        author: 'Admin Roti Gan',
+        image: 'https://images.unsplash.com/photo-1542826438-bd32f4a431a4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' // Default image
       });
-      onClose();
-      window.location.reload();
-    } catch (error) {
-      console.error('Error creating post:', error);
-    } finally {
-      setSubmitting(false);
+      
+      setTitle('');
+      setContent('');
+      setIsOpen(false);
+      alert('Postingan berhasil dipublikasikan! (Simulasi)');
+    } else {
+      alert('Judul dan konten harus diisi.');
     }
   };
 
-  try {
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" data-name="post-editor" data-file="components/PostEditor.js">
-        <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-          <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-[var(--text-main)]">Tambah Postingan Baru</h2>
-            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-              <span className="icon-x text-2xl"></span>
-            </button>
-          </div>
-          
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
-            <div>
-              <label className="block text-sm font-bold text-[var(--text-main)] mb-2">Judul</label>
-                <input 
-                  type="text"
-                  required
-                  value={formData.title}
-                  onChange={(e) => setFormData({...formData, title: e.target.value})}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[var(--primary-color)] focus:ring-opacity-20"
-                  placeholder="Masukkan judul postingan"
-                />
-            </div>
+  return (
+    <section id="post-editor" className="py-10 bg-[var(--secondary-color)]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-3xl font-bold mb-6" style={{ color: 'var(--text-main)' }}>Editor Postingan (Admin)</h2>
+        
+        <button 
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex items-center bg-[var(--accent-color)] text-white py-2 px-4 rounded-lg hover:bg-[#a0522d] transition-colors mb-4"
+        >
+            <i className="lucide lucide-plus-circle w-5 h-5 mr-2"></i>
+            {isOpen ? 'Tutup Editor' : 'Buat Postingan Baru'}
+        </button>
 
-            <div>
-              <label className="block text-sm font-bold text-[var(--text-main)] mb-2">Kategori</label>
-              <select 
-                value={formData.category}
-                onChange={(e) => setFormData({...formData, category: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[var(--primary-color)] focus:ring-opacity-20"
-              >
-                <option value="UMUM">UMUM</option>
-                <option value="PRESS RELEASE">PRESS RELEASE</option>
-                <option value="DISTRIBUSI">DISTRIBUSI</option>
-                <option value="PROMO">PROMO</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-[var(--text-main)] mb-2">URL Gambar (Opsional)</label>
-              <input 
-                type="url"
-                value={formData.imageUrl}
-                onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[var(--primary-color)] focus:ring-opacity-20"
-                placeholder="https://example.com/image.jpg"
-              />
-              <p className="text-xs text-gray-500 mt-1">Gunakan URL gambar dari Unsplash, Pexels, atau layanan hosting lainnya</p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-[var(--text-main)] mb-2">Konten</label>
-              <textarea 
-                required
-                value={formData.content}
-                onChange={(e) => setFormData({...formData, content: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[var(--primary-color)] focus:ring-opacity-20 h-40 resize-none"
-                placeholder="Tulis konten postingan di sini..."
-              ></textarea>
-            </div>
-
-            <div className="flex gap-3 pt-4">
-              <button 
-                type="submit"
-                disabled={submitting}
-                className="flex-1 bg-[var(--accent-color)] text-white py-3 rounded-lg font-bold hover:bg-opacity-90 transition disabled:opacity-50"
-              >
-                {submitting ? 'Menyimpan...' : 'Publikasikan'}
-              </button>
-              <button 
-                type="button"
-                onClick={onClose}
-                className="px-8 py-3 border border-gray-300 rounded-lg font-bold hover:bg-gray-50 transition"
-              >
-                Batal
-              </button>
-            </div>
-          </form>
-        </div>
+        {isOpen && (
+            <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-lg transition-all duration-300">
+                <div className="mb-4">
+                    <label htmlFor="post-title" className="block text-sm font-medium mb-2" style={{ color: 'var(--text-main)' }}>Judul Postingan</label>
+                    <input
+                        id="post-title"
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
+                        placeholder="Masukkan judul di sini..."
+                        required
+                    />
+                </div>
+                <div className="mb-6">
+                    <label htmlFor="post-content" className="block text-sm font-medium mb-2" style={{ color: 'var(--text-main)' }}>Konten</label>
+                    <textarea
+                        id="post-content"
+                        rows="5"
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
+                        placeholder="Tulis konten postingan di sini..."
+                        required
+                    ></textarea>
+                </div>
+                
+                <button
+                    type="submit"
+                    className="bg-[var(--primary-color)] text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#96795b] transition-colors"
+                >
+                    <i className="lucide lucide-send w-4 h-4 mr-2 inline-block"></i>
+                    Publikasikan Postingan
+                </button>
+            </form>
+        )}
       </div>
-    );
-  } catch (error) {
-    console.error('PostEditor component error:', error);
-    return null;
-  }
-}
+    </section>
+  );
+};
